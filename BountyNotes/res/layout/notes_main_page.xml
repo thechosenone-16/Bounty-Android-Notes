@@ -1,0 +1,135 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".NotesHomeActivity" >
+
+    <LinearLayout
+        android:id="@+id/addquicknotelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/quicknoteedittext"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Add New Note here"
+            android:inputType="textMultiLine"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dip"
+            android:background="#000000"
+            android:paddingBottom="2dp"
+            android:paddingTop="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/framelayoutbutton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="3dp"
+                android:src="@drawable/imgres" />
+
+            <ImageButton
+                android:id="@+id/quicknotedone"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="3dp"
+                android:src="@drawable/done" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.harsh.bountynotes.NoteDisplayScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/notedisplayscrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addquicknotelayout"
+        android:background="#ffffff" />
+
+        
+
+    <FrameLayout
+        android:id="@+id/addnoteframelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        android:visibility="gone" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <EditText
+                android:id="@+id/currentnotetitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/title" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="3dip"
+                android:layout_below="@id/currentnotetitle"
+                android:background="#000000"
+                android:paddingBottom="2dp"
+                android:paddingTop="5dp" />
+
+            <EditText
+                android:id="@+id/currentnotetext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider1"
+                android:hint="Type Note Here"
+                android:paddingTop="5dp" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="3dip"
+                android:layout_below="@id/currentnotetext"
+                android:background="#000000"
+                android:paddingBottom="2dp"
+                android:paddingTop="5dp" />
+
+            <ImageButton
+                android:id="@+id/datetimepickerbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider2"
+                android:src="@drawable/datepicker_icon" />
+
+            <TextView
+                android:id="@+id/datetimedisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/datetimepickerbutton"
+                android:paddingLeft="4dp"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/doneinframelayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="3dp"
+                android:paddingRight="3dp"
+                android:text="Done"
+                android:textSize="12sp" />
+        </RelativeLayout>
+    </FrameLayout>
+
+</RelativeLayout>
