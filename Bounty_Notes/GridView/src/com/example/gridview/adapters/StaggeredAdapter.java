@@ -44,17 +44,9 @@ public class StaggeredAdapter extends ArrayAdapter<Comment> {
 
 		holder = (ViewHolder) convertView.getTag();
 		if(comment.state){
-			if (Build.VERSION.SDK_INT >= 16) {
-				holder.rlNotes.setBackground(mContext.getResources().getDrawable(R.drawable.shadow_blue));
-			}else{
-				holder.rlNotes.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shadow_blue));
-			}
+			holder.rlNotes.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shadow_blue));
 		}else{
-			if (Build.VERSION.SDK_INT >= 16) {
-				holder.rlNotes.setBackground(mContext.getResources().getDrawable(R.drawable.shadow));
-			}else{
-				holder.rlNotes.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shadow));
-			}
+			holder.rlNotes.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shadow));
 		}
 		holder.txtHeader.setText(comment.title);
 		holder.txtView.setText(comment.comment);

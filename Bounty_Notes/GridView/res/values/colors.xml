@@ -4,18 +4,19 @@
     <color name="default_background_color">#E4E4E4</color>
     <color name="title">#666666</color>
     <color name="hint">#DDDDDD</color>
-        
-    <color name="default_evernote_background">#313332</color> 
+    <color name="default_evernote_background">#313332</color>
     <color name="evernote_title">#ffffff</color>
     <color name="evernote_linebutton">#333534</color>
     <color name="evernote_list_divider">#333534</color>
     <color name="evernote_footer">#2c2c2c</color>
     <color name="evernote_footer_text">#5b5b5c</color>
     <color name="evernote_button_pressed">#9eb39b</color>
-    <color name="evernote_button_bkg">#464847</color> 
-    <color name="transparent">@android:color/transparent</color> 
+    <color name="evernote_button_bkg">#464847</color>
+    <color name="transparent">@android:color/transparent</color>
     <color name="note_selection">#FFBBE535</color>
-    <color name="action_bar">#FFBBE535</color>  
-    
+    <color name="action_bar">#FFBBE535</color>
+    <color name="list_background">#fff</color>
+    <color name="list_background_pressed">#005959</color>
+    <color name="list_divider">#272727</color>
 
 </resources>

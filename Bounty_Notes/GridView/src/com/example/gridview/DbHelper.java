@@ -20,7 +20,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	      + TABLE_COMMENTS + "(" + COLUMN_ID
 	      + " integer primary key autoincrement, "
 	      + COLUMN_TITLE
-	      + " text not null,"
+	      + " date,"
 	      + COLUMN_UPDATED_DATE + " text not null,"
 	      + COLUMN_COMMENT
 	      + " text not null);";

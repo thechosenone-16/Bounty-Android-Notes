@@ -6,8 +6,26 @@
     <string name="action_settings">Settings</string>
     <string name="action_save">Save</string>
     <string name="buttondesc">desc</string>
+    <string name="hint_comment_title">Title</string>
+    <string name="hint_comment">Note</string>
+    <string name="btn_delete">Delete</string>
+     <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
 
-     <string name="hint_comment_title">Title</string>
-     <string name="hint_comment">Note</string>
-     <string name="btn_delete">Delete</string>
+    <string-array name="sliding_options">
+        <item>Notes</item>
+        <item>Reminders</item>
+        <item>Archive</item>
+        <item>Deleted</item>
+        <item>Help</item>
+    </string-array>
+
+    <array name="nav_drawer_icons">
+        <item>@android:drawable/ic_dialog_info</item>
+        <item>@android:drawable/ic_popup_reminder</item>
+        <item>@android:drawable/ic_input_add</item>
+        <item>@android:drawable/ic_menu_delete</item>
+        <item>@android:drawable/ic_menu_help</item>
+    </array>
+
 </resources>

@@ -21,9 +21,10 @@ package com.origamilabs.library.views;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
-import com.example.gridview.R;
-
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -53,8 +54,11 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ListAdapter;
+
+import com.example.gridview.R;
 
 /**
  * ListView and GridView just not complex enough? Try StaggeredGridView!
@@ -155,12 +159,15 @@ public class StaggeredGridView extends ViewGroup {
 
     private final EdgeEffectCompat mTopEdge;
     private final EdgeEffectCompat mBottomEdge;
+    boolean mIsCurrentAnimationCanceled = false;
 
     private ArrayList<ArrayList<Integer>> mColMappings = new ArrayList<ArrayList<Integer>>();
 
     private Runnable mPendingCheckForTap;
 
     private ContextMenuInfo mContextMenuInfo = null;
+    
+
 
     /**
      * The drawable used to draw the selector
@@ -234,6 +241,20 @@ public class StaggeredGridView extends ViewGroup {
      */
     private Rect mTouchFrame;
 
+    /**
+     * Helper class to store a {@link View} with its corresponding layout positions
+     * as a {@link Rect}.
+     */
+    private static class ViewRectPair {
+        public final View view;
+        public final Rect rect;
+
+        public ViewRectPair(View v, Rect r) {
+            view = v;
+            rect = r;
+        }
+    }
+    
     private static final class LayoutRecord {
         public int column;
         public long id = -1;
@@ -973,6 +994,13 @@ public class StaggeredGridView extends ViewGroup {
         layoutChildren(mDataChanged);
         fillDown(mFirstPosition + getChildCount(), 0);
         fillUp(mFirstPosition - 1, 0);
+        
+        if (mDataChanged) {
+            // Animation should only play if data has changed since populate() can be called
+            // multiple times with the same data set (e.g., screen size changed).
+        	animateGrid();
+        }
+        
         mPopulating = false;
         mDataChanged = false;
 
@@ -982,8 +1010,130 @@ public class StaggeredGridView extends ViewGroup {
         }
     }
 
+    /**
+     * This method animates all other views in the ListView container (not including ignoreView)
+     * into their final positions. It is called after ignoreView has been removed from the
+     * adapter, but before layout has been run. The approach here is to figure out where
+     * everything is now, then allow layout to run, then figure out where everything is after
+     * layout, and then to run animations between all of those start/end positions.
+     */
+    private static final int MOVE_DURATION = 1000;
+    HashMap<Long, Integer> mItemIdTopMap = new HashMap<Long, Integer>();
+   
+	private void animateGrid() {
+    	Log.i("animateGrid", "Grid items animated");
+        int firstVisiblePosition = 0;
+        for (int i = 0; i < getChildCount(); ++i) {
+            View child = getChildAt(i);
+                int position = firstVisiblePosition + i;
+                long itemId = mAdapter.getItemId(position);
+                mItemIdTopMap.put(itemId, child.getTop());
+        }
+      
 
+        final ViewTreeObserver observer = getViewTreeObserver();
+        observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                observer.removeOnPreDrawListener(this);
+                boolean firstAnimation = true;
+                int firstVisiblePosition = 0;
+                for (int i = 0; i < getChildCount(); ++i) {
+                    final View child = getChildAt(i);
+                    int position = firstVisiblePosition + i;
+                    long itemId = mAdapter.getItemId(position);
+                    Integer startTop = mItemIdTopMap.get(itemId);
+                    int top = child.getTop();
+                    if (startTop != null) {
+                        if (startTop != top) {
+                            int delta = startTop - top;
+                            child.setTranslationY(delta);
+                            child.animate().setDuration(MOVE_DURATION).translationY(0);
+                            if (firstAnimation) {
+                            	child.animate().setListener(new AnimatorListener() {
+									
+									@Override
+									public void onAnimationStart(Animator animation) {
+										
+									}
+									
+									@Override
+									public void onAnimationRepeat(Animator animation) {
+										
+									}
+									
+									@Override
+									public void onAnimationEnd(Animator animation) {
+										StaggeredGridView.this.setEnabled(true);
+										
+									}
+									
+									@Override
+									public void onAnimationCancel(Animator animation) {
+										
+									}
+								});
+                               
+                                firstAnimation = false;
+                            }
+                        }
+                    } else {
+                        // Animate new views along with the others. The catch is that they did not
+                        // exist in the start state, so we must calculate their starting position
+                        // based on neighboring views.
+                        int childHeight = child.getHeight() + 10;
+                        startTop = top + (i > 0 ? childHeight : -childHeight);
+                        int delta = startTop - top;
+                        child.setTranslationY(delta);
+                        child.animate().setDuration(MOVE_DURATION).translationY(0);
+                        if (firstAnimation) {
+                            child.animate().setListener(new AnimatorListener() {
+								
+								@Override
+								public void onAnimationStart(Animator animation) {
+									
+								}
+								
+								@Override
+								public void onAnimationRepeat(Animator animation) {
+									
+								}
+								
+								@Override
+								public void onAnimationEnd(Animator animation) {
+									StaggeredGridView.this.setEnabled(true);
+									
+								}
+								
+								@Override
+								public void onAnimationCancel(Animator animation) {
+									
+								}
+							});
+                            firstAnimation = false;
+                        }
+                    }
+                }
+                mItemIdTopMap.clear();
+                return true;
+            }
+        });
+    }
+   
 
+    private void recycleView(View view) {
+        if (view == null) {
+            return;
+        }
+
+        if (mInLayout) {
+            removeViewInLayout(view);
+            invalidate();
+        } else {
+            removeView(view);
+        }
+
+        mRecycler.addScrap(view);
+    }
     final void offsetChildren(int offset) {
         final int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
