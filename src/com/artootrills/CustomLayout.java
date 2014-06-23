@@ -197,7 +197,7 @@ public class CustomLayout extends ViewGroup implements OnGestureListener{
 		{
 			if(getScrollY()==prevHeight-getMeasuredHeight())
 			{
-				custom(height-getMeasuredHeight());
+				custom(height - prevHeight);
 			}
 			else
 			{
